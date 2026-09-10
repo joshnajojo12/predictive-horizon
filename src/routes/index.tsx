@@ -1,24 +1,36 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Pause, Play, RotateCcw } from "lucide-react";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+import { CameraViewport, ResidualBridge } from "@/components/camera-viewport";
+import { Panel, SectionLabel } from "@/components/panel";
+import { useSimulation } from "@/components/simulation-context";
+import { Button } from "@/components/ui/button";
+import { modeOptions, scenarioOptions, speedOptions } from "@/lib/simulation";
+
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title: "Acquisition Console — Predictive Virtual Camera PAT" },
+      { name: "description", content: "Live predictive acquisition and visual residual console for an aerospace PAT simulation." },
+      { property: "og:title", content: "Acquisition Console — Predictive Virtual Camera PAT" },
+      { property: "og:description", content: "Compare actual and virtual camera views while the PAT simulator predicts, corrects, acquires, tracks, and reacquires." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
+  component: AcquisitionPage,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
+function AcquisitionPage() {
+  const { state, start, pause, reset, setScenario, setMode, setSpeed, runExperiment } = useSimulation();
+  return <div className="space-y-3"><div className="flex flex-wrap items-end justify-between gap-3"><div><p className="font-mono text-[10px] uppercase tracking-[0.14em] text-cyan">Live PAT demonstration</p><h2 className="mt-1 text-xl font-semibold tracking-tight text-fg">Acquisition Console</h2><p className="mt-1 font-mono text-[11px] text-dim">Predict → look → compare → correct → acquire → track → reacquire</p></div><div className="flex items-center gap-2 font-mono text-[10px] text-dim"><span className="size-1.5 rounded-full bg-lime signal-pulse" /> TARGET {state.pat.targetStatus}</div></div>
+    <div className="grid gap-3 xl:grid-cols-12"><Panel title="Actual Acquisition Camera" eyebrow={`FOV ${state.camera.fov}°`} className="xl:col-span-4"><CameraViewport kind="actual" camera={state.camera} status={state.pat.targetStatus} targetVisible={state.targetVisible} /></Panel><Panel title="Virtual Expected Camera" eyebrow="PREDICTED LOS" className="relative xl:col-span-4"><CameraViewport kind="virtual" camera={state.camera} status="DETECTED" targetVisible={state.targetVisible} /><ResidualBridge predicted={state.camera.predictedPixel} actual={state.camera.actualPixel} /></Panel><TelemetryPanel /></div>
+    <div className="grid gap-3 xl:grid-cols-12"><Panel title="Technical Timeline" eyebrow="TARGET POSITION · PREDICTED · ACTUAL · POINTING ERROR" className="xl:col-span-8"><Timeline state={state} /></Panel><Panel title="Event Log" eyebrow={`${state.events.length} EVENTS`} className="xl:col-span-4"><EventLog state={state} /></Panel></div>
+    <Panel title="Control Panel" eyebrow="SCENARIO · SPEED · PAT MODE"><div className="grid gap-4 p-3 lg:grid-cols-[1fr_auto]"><div className="space-y-3"><div><SectionLabel>Scenario</SectionLabel><div className="mt-2 flex flex-wrap gap-1.5">{scenarioOptions.map((scenario) => <button key={scenario} type="button" onClick={() => setScenario(scenario)} className={`rounded-sm border px-2 py-1.5 font-mono text-[10px] transition-colors ${state.scenario === scenario ? "border-cyan bg-cyan/10 text-cyan" : "border-edge text-dim hover:border-edge2 hover:text-fg"}`}>{scenario}</button>)}</div></div><div className="flex flex-wrap items-center gap-4"><div><SectionLabel>Simulation Speed</SectionLabel><div className="mt-2 flex gap-1.5">{speedOptions.map((speed) => <button key={speed} type="button" onClick={() => setSpeed(speed)} className={`rounded-sm border px-2.5 py-1.5 font-mono text-[10px] ${state.speed === speed ? "border-cyan bg-cyan/10 text-cyan" : "border-edge text-dim"}`}>{speed}x</button>)}</div></div><div><SectionLabel>PAT Mode</SectionLabel><div className="mt-2 flex gap-1.5">{modeOptions.map((mode) => <button key={mode} type="button" onClick={() => setMode(mode)} className={`rounded-sm border px-2.5 py-1.5 font-mono text-[10px] ${state.pat.mode === mode ? "border-cyan bg-cyan/10 text-cyan" : "border-edge text-dim"}`}>{mode}</button>)}</div></div></div></div><div className="flex flex-wrap items-end gap-1.5 lg:justify-end"><Button size="sm" onClick={start}><Play />Start</Button><Button size="sm" variant="outline" onClick={pause}><Pause />Pause</Button><Button size="sm" variant="outline" onClick={reset}><RotateCcw />Reset</Button></div></div></Panel>
+    <div className="grid gap-3 lg:grid-cols-[1fr_1fr]"><Panel title="Baseline vs Proposed" eyebrow="SIMULATION DATA"><div className="flex flex-wrap items-center gap-2 p-3"><Button size="sm" variant="outline" onClick={() => runExperiment("BASELINE")}>Run Baseline</Button><Button size="sm" variant="outline" onClick={() => runExperiment("PROPOSED")}>Run Proposed</Button><Button size="sm" variant="outline" onClick={() => runExperiment("COMPARISON")}>Run Comparison</Button><span className="font-mono text-[10px] text-dim">Full parameter control on Experiment Lab.</span></div></Panel><Panel title="Acquisition State" eyebrow="LIVE SIGNAL"><div className="grid grid-cols-3 gap-3 p-3 font-mono text-[10px]"><div><span className="block text-dim">MODE</span><span className="mt-1 block text-cyan">{state.pat.mode}</span></div><div><span className="block text-dim">RESIDUAL</span><span className="mt-1 block text-amber">{Math.hypot(state.pixelResidual.x, state.pixelResidual.y).toFixed(1)} px</span></div><div><span className="block text-dim">LOCK</span><span className="mt-1 block text-lime">{state.pat.targetStatus}</span></div></div></Panel></div>
+  </div>;
 }
+
+function TelemetryPanel() { const { state } = useSimulation(); const rows = [["Pred X", state.camera.predictedPixel.x.toFixed(1), "text-fg"], ["Pred Y", state.camera.predictedPixel.y.toFixed(1), "text-fg"], ["Act X", state.camera.actualPixel.x.toFixed(1), "text-fg"], ["Act Y", state.camera.actualPixel.y.toFixed(1), "text-fg"], ["ΔX", state.pixelResidual.x.toFixed(1), "text-amber"], ["ΔY", state.pixelResidual.y.toFixed(1), "text-amber"], ["Pan Err", `${state.angularError.pan.toFixed(3)}°`, "text-fg"], ["Tilt Err", `${state.angularError.tilt.toFixed(3)}°`, "text-fg"], ["Gimbal P", `${state.pat.gimbalCommand.pan.toFixed(3)}°`, "text-fg"], ["Gimbal T", `${state.pat.gimbalCommand.tilt.toFixed(3)}°`, "text-fg"], ["Confidence", `${state.pat.confidence.toFixed(1)}%`, "text-lime"], ["FPS", `${state.fps}`, "text-fg"], ["Latency", `${state.processingLatency} ms`, "text-fg"], ["Acq Time", `${state.acquisitionTime.toFixed(2)} s`, "text-fg"]] as const; return <Panel title="PAT Telemetry" eyebrow="LIVE" className="xl:col-span-4"><div className="grid grid-cols-2 gap-x-4 gap-y-2 p-3 font-mono text-[11px]"><div className="col-span-2 flex items-center justify-between rounded-sm border border-edge px-2 py-1.5"><span className="text-dim uppercase tracking-[0.1em]">Mode</span><span className="text-cyan">{state.pat.mode}</span></div><div className="col-span-2 flex items-center justify-between rounded-sm border border-edge px-2 py-1.5"><span className="text-dim uppercase tracking-[0.1em]">Target Status</span><span className="text-lime">{state.pat.targetStatus}</span></div>{rows.map(([label, value, tone]) => <div key={label} className="flex items-center justify-between"><span className="text-dim">{label}</span><span className={tone}>{value}</span></div>)}<div className="col-span-2 flex items-center justify-between rounded-sm border border-edge px-2 py-1.5"><span className="text-dim uppercase tracking-[0.1em]">Tracking RMSE</span><span className="text-fg">{state.trackingRmse.toFixed(4)}°</span></div></div></Panel>; }
+function Timeline({ state }: { state: ReturnType<typeof useSimulation>["state"] }) { const maxError = Math.max(...state.telemetry.map((point) => point.pointingError), 1); const points = (key: "targetPosition" | "predictedPosition" | "actualPosition") => state.telemetry.map((point, index) => `${(index / Math.max(state.telemetry.length - 1, 1)) * 100},${100 - (point[key].x / 90) * 100}`).join(" "); const errorPoints = state.telemetry.map((point, index) => `${(index / Math.max(state.telemetry.length - 1, 1)) * 100},${100 - (point.pointingError / maxError) * 100}`).join(" "); return <div className="m-3"><div className="relative h-44 overflow-hidden rounded-sm border border-edge bg-void grid-bg"><div className="absolute inset-x-0 top-1/3 h-px bg-edge" /><div className="absolute inset-x-0 top-2/3 h-px bg-edge" /><svg className="absolute inset-3 h-[calc(100%-24px)] w-[calc(100%-24px)]" viewBox="0 0 100 100" preserveAspectRatio="none"><polyline points={points("targetPosition")} fill="none" stroke="var(--color-cyan)" strokeWidth="1.5" vectorEffect="non-scaling-stroke" /><polyline points={points("predictedPosition")} fill="none" stroke="var(--color-amber)" strokeWidth="1.2" vectorEffect="non-scaling-stroke" /><polyline points={errorPoints} fill="none" stroke="var(--color-lime)" strokeWidth="1.1" vectorEffect="non-scaling-stroke" /></svg><div className="absolute bottom-1 left-2 font-mono text-[9px] text-dim">T+0.0 s</div><div className="absolute bottom-1 right-2 font-mono text-[9px] text-dim">T+{state.timestamp.toFixed(1)} s</div></div><div className="mt-2 flex flex-wrap gap-4 font-mono text-[10px]"><span className="text-cyan">● TARGET POSITION</span><span className="text-amber">● PREDICTED POSITION</span><span className="text-lime">● POINTING ERROR</span></div></div>; }
+function EventLog({ state }: { state: ReturnType<typeof useSimulation>["state"] }) { return <div className="max-h-52 space-y-1.5 overflow-auto p-3 font-mono text-[10px] leading-relaxed">{state.events.map((event, index) => <p key={`${event.timestamp}-${index}`}><span className="text-cyan">{event.timestamp}</span> <span className={event.tone === "success" ? "text-lime" : event.tone === "warning" ? "text-amber" : "text-dim"}>{event.message}</span></p>)}</div>; }

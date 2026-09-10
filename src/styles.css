@@ -2,6 +2,8 @@
 @source "../src";
 @import "tw-animate-css";
 
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600&display=swap");
+
 @custom-variant dark (&:is(.dark *));
 
 /*
@@ -19,6 +21,19 @@
  */
 
 @theme inline {
+  --color-void: var(--void);
+  --color-panel: var(--panel);
+  --color-panel2: var(--panel2);
+  --color-edge: var(--edge);
+  --color-edge2: var(--edge2);
+  --color-fg: var(--fg);
+  --color-dim: var(--dim);
+  --color-cyan: var(--cyan);
+  --color-amber: var(--amber);
+  --color-lime: var(--lime);
+  --color-red: var(--red);
+  --font-sans: "Space Grotesk", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -62,6 +77,17 @@
 }
 
 :root {
+  --void: oklch(0.13 0.02 255);
+  --panel: oklch(0.17 0.025 255);
+  --panel2: oklch(0.21 0.03 255);
+  --edge: oklch(0.27 0.03 255);
+  --edge2: oklch(0.36 0.035 255);
+  --fg: oklch(0.86 0.018 250);
+  --dim: oklch(0.54 0.035 255);
+  --cyan: oklch(0.79 0.16 198);
+  --amber: oklch(0.82 0.17 78);
+  --lime: oklch(0.86 0.19 124);
+  --red: oklch(0.68 0.16 25);
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.129 0.042 264.695);
@@ -141,4 +167,20 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
   }
+}
+
+@utility grid-bg {
+  background-image: linear-gradient(color-mix(in oklab, var(--color-cyan) 7%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in oklab, var(--color-cyan) 7%, transparent) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+
+@keyframes signal-pulse {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.35); }
+}
+
+.signal-pulse { animation: signal-pulse 1.6s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .signal-pulse { animation: none; }
 }
