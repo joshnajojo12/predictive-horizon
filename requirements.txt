@@ -2,3 +2,6 @@ fastapi
 uvicorn
 pydantic
 pytest
+numpy
+opencv-python-headless
+

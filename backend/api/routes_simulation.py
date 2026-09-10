@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from .schemas import SimulationStateResponse, ScenarioRequest
+from .schemas import SimulationStateResponse, ScenarioRequest, AlgorithmModeRequest
 from backend.simulation.simulation_engine import SimulationEngine
 
 router = APIRouter()
@@ -29,7 +29,13 @@ def set_scenario(req: ScenarioRequest):
     engine.set_scenario(req.scenario)
     return {"status": "scenario_updated", "scenario": req.scenario}
 
+@router.post("/mode")
+def set_algorithm_mode(req: AlgorithmModeRequest):
+    engine.set_algorithm_mode(req.mode)
+    return {"status": "mode_updated", "mode": req.mode}
+
 @router.post("/step")
 def step_simulation():
     engine.step()
     return {"status": "stepped"}
+

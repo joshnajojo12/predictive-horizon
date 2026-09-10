@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 
 class Coordinate(BaseModel):
     x: float
@@ -23,3 +23,12 @@ class SimulationStateResponse(BaseModel):
 
 class ScenarioRequest(BaseModel):
     scenario: str
+
+class AlgorithmModeRequest(BaseModel):
+    mode: str  # BASELINE or PROPOSED
+
+class ExperimentRunRequest(BaseModel):
+    scenario: str = "NORMAL"
+    num_steps: int = 150
+    seed: int = 42
+

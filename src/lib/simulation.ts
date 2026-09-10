@@ -289,7 +289,7 @@ export const advanceSimulation = (state: SimulationState): SimulationState => {
   };
 };
 
-const formatTime = (timestamp: number) => {
+export const formatTime = (timestamp: number) => {
   const seconds = timestamp % 60;
   return `12:04:${seconds.toFixed(3).padStart(6, "0")}`;
-};
+};

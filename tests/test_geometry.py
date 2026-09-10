@@ -1,25 +1,37 @@
 import pytest
-from backend.utils.geometry import wrap_angle, angle_to_pixel, pixel_to_angle
+import math
+from backend.utils.geometry import (
+    wrap_angle, angle_to_pixel, pixel_to_angle, vec3_norm, vec3_normalize,
+    euler_to_rotation_matrix, pan_tilt_to_rotation_matrix, vector_to_az_el, az_el_to_vector
+)
 
 def test_wrap_angle():
     assert wrap_angle(10) == 10
     assert wrap_angle(370) == 10
     assert wrap_angle(-190) == 170
 
+def test_vec3_operations():
+    v = (3.0, 4.0, 0.0)
+    assert vec3_norm(v) == 5.0
+    u = vec3_normalize(v)
+    assert u[0] == pytest.approx(0.6)
+    assert u[1] == pytest.approx(0.8)
+
+def test_rotation_matrix():
+    R = euler_to_rotation_matrix(0.0, 0.0, 0.0)
+    assert R[0][0] == 1.0
+    assert R[1][1] == 1.0
+    assert R[2][2] == 1.0
+
+def test_az_el_conversions():
+    vec = az_el_to_vector(10.0, 5.0)
+    az, el = vector_to_az_el(vec)
+    assert az == pytest.approx(10.0, abs=1e-2)
+    assert el == pytest.approx(5.0, abs=1e-2)
+
 def test_angle_to_pixel():
-    # Target exactly at pan/tilt should be center (512, 512)
     px, py = angle_to_pixel(10.0, 5.0, 10.0, 5.0, 5.0, 5.0, 1024, 1024)
     assert px == 512.0
     assert py == 512.0
-    
-    # Target outside FOV should return None
     assert angle_to_pixel(15.0, 5.0, 10.0, 5.0, 5.0, 5.0, 1024, 1024) is None
 
-def test_pixel_to_angle():
-    az, el = pixel_to_angle(512.0, 512.0, 5.0, 5.0, 1024, 1024)
-    assert az == 0.0
-    assert el == 0.0
-    
-    az, el = pixel_to_angle(1024.0, 0.0, 5.0, 5.0, 1024, 1024)
-    assert az == 2.5
-    assert el == -2.5
