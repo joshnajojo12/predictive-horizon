@@ -1,5 +1,6 @@
 - [ ] Establish aerospace visual system and shared shell
 - [ ] Add typed mock simulation service and state model
 - [ ] Build acquisition console with live controls and telemetry
-- [ ] Add Mission View and Experiment Lab pages
+- [ ] Add Mission View, Experiment Lab, and Pipeline as separate stateful pages
+- [ ] Add shared navigation shell and preserve simulation state across pages
 - [ ] Validate routes, diagnostics, and responsive rendering
