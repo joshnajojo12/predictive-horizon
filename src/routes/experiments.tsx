@@ -10,9 +10,9 @@ import { defaultScenarioConfig, scenarioOptions, type ScenarioConfig } from "@/l
 export const Route = createFileRoute("/experiments")({
   head: () => ({
     meta: [
-      { title: "Experiment Lab — Predictive Virtual Camera PAT" },
-      { name: "description", content: "Configure disturbances and compare baseline and proposed PAT simulation results." },
-      { property: "og:title", content: "Experiment Lab — Predictive Virtual Camera PAT" },
+      { title: "Experiment Lab — VISTA-PAT" },
+      { name: "description", content: "Configure disturbances and compare baseline and proposed VISTA-PAT simulation results." },
+      { property: "og:title", content: "Experiment Lab — VISTA-PAT" },
       { property: "og:description", content: "Run simulation experiments across pointing, ephemeris, attitude, vibration, noise, and delay conditions." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

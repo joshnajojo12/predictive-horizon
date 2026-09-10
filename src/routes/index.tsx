@@ -10,9 +10,9 @@ import { modeOptions, scenarioOptions, speedOptions } from "@/lib/simulation";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Acquisition Console — Predictive Virtual Camera PAT" },
-      { name: "description", content: "Live predictive acquisition and visual residual console for an aerospace PAT simulation." },
-      { property: "og:title", content: "Acquisition Console — Predictive Virtual Camera PAT" },
+      { title: "Acquisition Console — VISTA-PAT" },
+      { name: "description", content: "Live predictive acquisition and visual residual console for VISTA-PAT." },
+      { property: "og:title", content: "Acquisition Console — VISTA-PAT" },
       { property: "og:description", content: "Compare actual and virtual camera views while the PAT simulator predicts, corrects, acquires, tracks, and reacquires." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

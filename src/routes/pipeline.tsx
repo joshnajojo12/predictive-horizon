@@ -7,9 +7,9 @@ import { useSimulation } from "@/components/simulation-context";
 export const Route = createFileRoute("/pipeline")({
   head: () => ({
     meta: [
-      { title: "PAT Pipeline — Predictive Virtual Camera PAT" },
-      { name: "description", content: "Technical block diagram for the predictive virtual camera assisted PAT processing chain." },
-      { property: "og:title", content: "PAT Pipeline — Predictive Virtual Camera PAT" },
+      { title: "PAT Pipeline — VISTA-PAT" },
+      { name: "description", content: "Technical block diagram for the VISTA-PAT processing chain." },
+      { property: "og:title", content: "PAT Pipeline — VISTA-PAT" },
       { property: "og:description", content: "Inspect the simulated ephemeris-to-acquisition processing architecture." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

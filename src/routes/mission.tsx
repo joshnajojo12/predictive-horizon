@@ -9,9 +9,9 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/mission")({
   head: () => ({
     meta: [
-      { title: "Mission View — Predictive Virtual Camera PAT" },
-      { name: "description", content: "3D mission geometry view for the predictive virtual camera PAT simulation." },
-      { property: "og:title", content: "Mission View — Predictive Virtual Camera PAT" },
+      { title: "Mission View — VISTA-PAT" },
+      { name: "description", content: "3D mission geometry view for the VISTA-PAT simulation." },
+      { property: "og:title", content: "Mission View — VISTA-PAT" },
       { property: "og:description", content: "Inspect spacecraft geometry, line of sight, beacon direction, and gimbal orientation." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

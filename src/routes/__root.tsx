@@ -79,14 +79,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Predictive Virtual Camera Assisted PAT" },
-      { name: "description", content: "Aerospace PAT simulation console for predictive optical beacon acquisition and tracking." },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Predictive Virtual Camera Assisted PAT" },
-      { property: "og:description", content: "Aerospace PAT simulation console for predictive optical beacon acquisition and tracking." },
+      { title: "VISTA-PAT" },
+      { name: "description", content: "Physics-aware virtual PAT simulation and testing platform" },
+      { property: "og:title", content: "VISTA-PAT" },
+      { property: "og:description", content: "Physics-aware virtual PAT simulation and testing platform" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {

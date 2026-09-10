@@ -20,11 +20,11 @@ export function AppShell({ children }: { children: ReactNode }) {
       <header className="mx-auto flex max-w-[1680px] items-center justify-between border-b border-edge px-4 py-4 lg:px-6">
         <div className="flex min-w-0 items-center gap-3">
           <div className="grid size-9 shrink-0 place-items-center rounded-md bg-panel2 text-cyan ring-1 ring-edge2">
-            <span className="font-mono text-sm font-semibold">P·V</span>
+            <span className="font-mono text-sm font-semibold">VP</span>
           </div>
           <div className="min-w-0">
-            <h1 className="truncate text-sm font-semibold tracking-tight text-fg sm:text-lg">Predictive Virtual Camera Assisted PAT</h1>
-            <p className="truncate font-mono text-[10px] uppercase tracking-[0.12em] text-dim sm:text-[11px]">From Blind Search to Predictive Acquisition</p>
+            <h1 className="truncate text-sm font-semibold tracking-tight text-fg sm:text-lg">VISTA-PAT</h1>
+            <p className="truncate font-mono text-[10px] uppercase tracking-[0.12em] text-dim sm:text-[11px]">Virtual Intelligent Spacecraft Tracking & Acquisition Platform</p>
           </div>
         </div>
         <div className="hidden items-center gap-5 font-mono text-[10px] lg:flex lg:text-[11px]">
