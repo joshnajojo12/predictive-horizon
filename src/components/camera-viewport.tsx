@@ -1,6 +1,6 @@
-import type { CameraState, PixelCoordinate, TargetStatus } from "@/lib/simulation";
+import type { AcquisitionPhase, CameraState, PixelCoordinate, TargetStatus } from "@/lib/simulation";
 
-export function CameraViewport({ kind, camera, status, targetVisible }: { kind: "actual" | "virtual"; camera: CameraState; status: TargetStatus; targetVisible: boolean }) {
+export function CameraViewport({ kind, camera, status, targetVisible }: { kind: "actual" | "virtual"; camera: CameraState; status: TargetStatus | AcquisitionPhase; targetVisible: boolean }) {
   const point = kind === "actual" ? camera.actualPixel : camera.predictedPixel;
   const x = (point.x / 512) * 100;
   const y = (point.y / 512) * 100;

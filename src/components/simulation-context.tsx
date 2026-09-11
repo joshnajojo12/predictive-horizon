@@ -18,6 +18,7 @@ interface SimulationContextValue {
   setScenario: (scenario: ScenarioName) => void;
   setMode: (mode: PatMode) => void;
   setSpeed: (speed: SimulationSpeed) => void;
+  triggerDisturbance: () => void;
   runExperiment: (label: "BASELINE" | "PROPOSED" | "COMPARISON") => void;
 }
 
@@ -42,6 +43,7 @@ export function SimulationProvider({ children }: { children: ReactNode }) {
       setScenario: (scenario) => setState((current) => simulationService.setScenario(current, scenario)),
       setMode: (mode) => setState((current) => simulationService.setMode(current, mode)),
       setSpeed: (speed) => setState((current) => simulationService.setSpeed(current, speed)),
+      triggerDisturbance: () => setState((current) => simulationService.triggerDisturbance(current)),
       runExperiment: (label) => setState((current) => simulationService.runExperiment(current, label)),
     }),
     [state],
