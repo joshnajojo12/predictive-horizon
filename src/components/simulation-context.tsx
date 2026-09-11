@@ -119,15 +119,27 @@ export function SimulationProvider({ children }: { children: ReactNode }) {
     () => ({
       state,
       start: () => {
-        postStartSimulation();
+        postStartSimulation().then(() => {
+          fetchSimulationState().then((s) => {
+            if (s) setState((c) => ({ ...c, running: s.running, timestamp: s.timestamp }));
+          });
+        });
         setState((current) => simulationService.startSimulation(current));
       },
       pause: () => {
-        postStopSimulation();
+        postStopSimulation().then(() => {
+          fetchSimulationState().then((s) => {
+            if (s) setState((c) => ({ ...c, running: s.running }));
+          });
+        });
         setState((current) => simulationService.pauseSimulation(current));
       },
       reset: () => {
-        postResetSimulation();
+        postResetSimulation().then(() => {
+          fetchSimulationState().then((s) => {
+            if (s) setState((c) => ({ ...c, running: false, timestamp: 0 }));
+          });
+        });
         setState(simulationService.resetSimulation());
       },
       setScenario: (scenario) => {

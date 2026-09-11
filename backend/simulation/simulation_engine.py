@@ -52,6 +52,7 @@ class SimulationEngine:
         self._lock = threading.RLock()
         self._thread: Optional[threading.Thread] = None
         self._stop_event = threading.Event()
+        self._ensure_worker()
 
     def _ensure_worker(self):
         if self._thread is None or not self._thread.is_alive():
@@ -66,8 +67,11 @@ class SimulationEngine:
             dt = now - last_t
             last_t = now
             if self.running:
-                with self._lock:
-                    self.step(min(dt, 0.2))
+                try:
+                    with self._lock:
+                        self.step(min(dt, 0.2))
+                except Exception as e:
+                    self.messages.append(f"Simulation loop error: {str(e)}")
             time.sleep(0.05)
 
     def start(self):
@@ -85,12 +89,14 @@ class SimulationEngine:
             self.target = TargetModel(init_az=10.0, init_el=5.0)
             self.gimbal.reset(init_pan=init_pan, init_tilt=init_tilt)
             self.pat_manager.reset()
+            self.detector.confidence = 0.0
             self.controller.reset()
             self.timestamp = 0.0
             self.running = False
             self.residual = (0.0, 0.0)
             self.actual_coord = (256.0, 256.0)
             self.predicted_coord = (256.0, 256.0)
+            self.messages = []
 
 
     def set_scenario(self, scenario_name: str):

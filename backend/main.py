@@ -8,10 +8,11 @@ app = FastAPI(title=config.title, version=config.version)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 app.include_router(routes_simulation.router, prefix="/api/simulation", tags=["Simulation"])
 app.include_router(routes_experiments.router, prefix="/api/experiments", tags=["Experiments"])
