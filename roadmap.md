@@ -4,3 +4,4 @@
 - [ ] Add Mission View, Experiment Lab, and Pipeline as separate stateful pages
 - [ ] Add shared navigation shell and preserve simulation state across pages
 - [ ] Validate routes, diagnostics, and responsive rendering
+- [ ] Drive Acquisition through deterministic FIND → hex search → lock → keep → loss → get-back → reacquisition flow

@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 import { useSimulation } from "@/components/simulation-context";
 
-const navItems = [
+const navItems: Array<{ label: string; to: "/" | "/mission" | "/experiments" | "/pipeline"; icon: typeof Crosshair; exact?: boolean }> = [
   { label: "Acquisition", to: "/", icon: Crosshair, exact: true },
   { label: "Mission View", to: "/mission", icon: Orbit },
   { label: "Experiment Lab", to: "/experiments", icon: FlaskConical },
